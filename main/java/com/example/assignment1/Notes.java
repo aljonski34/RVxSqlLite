@@ -1,5 +1,5 @@
 package com.example.assignment1;
-
+// AJ DEV
 public class Notes {
 
     private long id;

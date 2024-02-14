@@ -3,57 +3,74 @@
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
     android:layout_height="wrap_content"
+
     android:padding="10dp"
-    android:backgroundTint="@color/black"
+    app:cardCornerRadius="10dp"
+    android:backgroundTint="@color/navy"
     android:layout_marginTop="20dp"
     android:id="@+id/card"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
+    <LinearLayout
 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="0dp"
 
-        <LinearLayout
+        android:orientation="vertical">
 
-            android:layout_marginStart="0dp"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="Title"
+            android:textColor="@color/white"
 
-            android:orientation="vertical">
+            android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Title"
 
-                android:textSize="20dp" />
 
-            <TextView
-                android:id="@+id/note"
-                android:textSize="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Note" />
+        <TextView
+            android:id="@+id/note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Note"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
 
-            <TextView
-                android:id="@+id/date"
-                android:textSize="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Date" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Date"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
 
-            <TextView
-                android:id="@+id/time"
-                android:textSize="15dp"
-                android:layout_marginTop="5dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time" />
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:text="Time"
+            android:textColor="@color/white"
+            android:textSize="15dp" />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="178dp"
+        android:layout_height="112dp"
+        android:layout_marginLeft="220dp"
+        app:srcCompat="@drawable/sched" />
 
 
 </androidx.cardview.widget.CardView>

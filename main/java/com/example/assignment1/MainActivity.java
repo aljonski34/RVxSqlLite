@@ -22,6 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             DayNight = "PM";
                         }
-                        int hourDay = hour % 12;
+                        int hourDay = hours % 12;
                         if (hourDay == 0) {
                             hourDay = 12;
 
@@ -153,15 +154,21 @@ public class MainActivity extends AppCompatActivity {
         dates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Calendar calendar  = Calendar.getInstance();
+                int years = calendar.get(Calendar.YEAR);
+                int months = calendar.get(Calendar.MONTH);
+
+                int days = calendar.get(Calendar.DAY_OF_MONTH);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
 
                         //Showing the picked value in the textView
-                        dates.setText(String.valueOf(year) + "/" + String.valueOf(month) + "/" + String.valueOf(day));
+                        dates.setText(String.valueOf(year) + "/" + String.valueOf(month+1) + "/" + String.valueOf(day));
 
                     }
-                }, 2024, 01, 20);
+                }, years, months, days);
 
                 datePickerDialog.show();
 
@@ -194,72 +201,143 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-   private void showDialog(Notes notelist){
-         CharSequence[] charSequences = new CharSequence[] {"Edit","Delete"};
+    private void showDialog(Notes notelist){
+        CharSequence[] charSequences = new CharSequence[] {"Edit","Delete"};
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
 
 
 
-            alertDialog.setTitle("Choose an Action");
+        alertDialog.setTitle("Choose an Action");
 
-            alertDialog.setItems(charSequences, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int which) {
-                    if(which == 0){
-                        EditDialog(notelist);
+        alertDialog.setItems(charSequences, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                if(which == 0){
+                    EditDialog(notelist);
 
-                    }else{
-                        db.DeleteRecord(notelist.getId());
-                        refresh();
-                    }
+                }else{
+                    db.DeleteRecord(notelist.getId());
+                    refresh();
                 }
-            });
-            alertDialog.show();
+            }
+        });
+        alertDialog.show();
     }
 
 
     private void EditDialog(Notes noteList){
-                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-                View view1 = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialoglayout,null);
+        View view1 = LayoutInflater.from(MainActivity.this).inflate(R.layout.dialoglayout,null);
 
-                final TextInputEditText etTitle = view1.findViewById(R.id.titleText);
-                final TextInputEditText etNotes = view1.findViewById(R.id.NotesText);
-                final TextView dates = view1.findViewById(R.id.date);
-                final TextView times = view1.findViewById(R.id.time);
+        final TextInputEditText etTitle = view1.findViewById(R.id.titleText);
+        final TextInputEditText etNotes = view1.findViewById(R.id.NotesText);
+        final TextView dates = view1.findViewById(R.id.date);
+        final TextView times = view1.findViewById(R.id.time);
 
-                etTitle.setText(noteList.getTitle());
-                etNotes.setText(noteList.getNotes());
-                dates.setText(noteList.getDate());
-                times.setText(noteList.getTime());
+        etTitle.setText(noteList.getTitle());
+        etNotes.setText(noteList.getNotes());
+        dates.setText(noteList.getDate());
+        times.setText(noteList.getTime());
 
-                dialog.setTitle("EDIT NOTES");
-                dialog.setView(view1);
+        dates.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar  = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
 
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                dialog.setPositiveButton("UPDATE",new DialogInterface.OnClickListener(){
+                DatePickerDialog  datePickerDialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
 
 
                     @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+                    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        dates.setText( String.valueOf(year) + "/"+ String.valueOf(month +1) + "/" + String.valueOf(day));
+                    }
+                },year,month,day);
+                datePickerDialog.show();
+            }
 
-                        String newTitle = etTitle.getText().toString();
-                        String newNotes = etNotes.getText().toString();
-                        String newDate = dates.getText().toString();
-                        String time =  times.toString().toString();
+        });
+
+        times.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar calendar = Calendar.getInstance();
+                int time = calendar.get(Calendar.MINUTE);
+                int hours = calendar.get(Calendar.HOUR_OF_DAY);
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+
+                        String AMPM;
+                        if(hour  < 12){
+                            AMPM = "AM";
+                        }else{
+                            AMPM = "PM";
+
+                        }
 
 
+                        int hourday = hour % 12;
+                        if(hourday == 0) {
+                            hourday = 12;
+                        }
 
-                        db.EditRecord(noteList.getId(),newTitle,newNotes,newDate,time);
+                        String setTime = String.format("%02d:%02d%s",hourday,minute,AMPM);
+                        times.setText(setTime);
+
+
 
                     }
-                });dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                },time,hours,false);
+                timePickerDialog.show();
+            }
+        });
+
+        dialog.setTitle("EDIT NOTES");
+        dialog.setView(view1);
+
+
+        dialog.setPositiveButton("UPDATE",new DialogInterface.OnClickListener(){
+
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+
+                String newTitle = etTitle.getText().toString();
+                String newNotes = etNotes.getText().toString();
+
+
+
+                String newDate = dates.getText().toString();
+                String newtime =  times.getText().toString();
+
+
+
+
+                if(newTitle.isEmpty() || newNotes.isEmpty())
+                {
+                    Toast.makeText(MainActivity.this, "Title and Notes Cant be empty", Toast.LENGTH_SHORT).show();
+                }else {
+                    db.EditRecord(noteList.getId(), newTitle, newNotes, newDate, newtime);
+                    refresh();
+                }
+
+
+            }
+        });dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialogInterface.dismiss();
             }
         });
-                dialog.show();
+        dialog.show();
     }
 
 

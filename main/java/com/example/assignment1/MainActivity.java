@@ -25,7 +25,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
-
+// AJ DEV
 public class MainActivity extends AppCompatActivity {
     Database db;
     FloatingActionButton button;
@@ -186,8 +186,13 @@ public class MainActivity extends AppCompatActivity {
                 String note = notes.getText().toString();
                 String date = dates.getText().toString();
                 String time = times.getText().toString();
-                db.AddRecord(title, note, date, time);
-                refresh();
+                if(title.isEmpty() || note.isEmpty() || date.equals("Set Date") || time.equals("Set Time")){
+                    Toast.makeText(MainActivity.this, "SET DATA", Toast.LENGTH_SHORT).show();
+                }else {
+
+                    db.AddRecord(title, note, date, time);
+                    refresh();
+                }
             }
         });
         dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
